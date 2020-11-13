@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ContactActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EbayOrder chuyên cung cấp dịch vụ đặt hàng Ebay online, vận chuyển gửi hàng tử Mỹ về Việt Nam an toàn hiệu quả và tiết kiệm chi phí"
+                android:textSize="22sp"
+                android:textColor="#000000"
+                android:textAlignment="inherit"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginTop="4dp">
+            </TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chúng tôi cung cấp thông tin hàng ngàn sản phẩm trên Ebay và phương thức đặt hàng tiện lợi, dễ dùng cho khách hàng khi mua sắm.Khách hàng có thể đặt hàng dễ dàng, trực tiếp giá gốc mà không cần lo ngại rào cản ngôn ngũ, thanh toán, vận chuyển trong và ngoài nước"
+                android:textSize="22sp"
+                android:textColor="#000000"
+                android:textAlignment="inherit"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginTop="4dp">
+            </TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quy trình đơn giản của chúng tôi:"
+                android:textSize="22sp"
+                android:textColor="#000000"
+                android:textAlignment="inherit"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginTop="4dp">
+            </TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bước 1: Khách hàng đặt hàng sản phẩm trên ứng dụng và thanh toán"
+                android:textSize="22sp"
+                android:textColor="#FF8C00"
+                android:textAlignment="inherit"
+                android:textStyle="bold"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginTop="4dp">
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:text="Bước 2: Chúng tôi tiến hành mua sản phẩm và lưu kho"
+                android:textAlignment="inherit"
+                android:textColor="#FF8C00"
+                android:textSize="22sp"
+                android:textStyle="bold"></TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bước 3: Vận chuyển từ Mỹ về tận tay khách hàng(12-15 ngày)"
+                android:textSize="22sp"
+                android:textColor="#FF8C00"
+                android:textAlignment="inherit"
+                android:textStyle="bold"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginTop="4dp">
+            </TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thông tin liên hệ"
+                android:textSize="22sp"
+                android:textColor="#000000"
+                android:textAlignment="inherit"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginTop="8dp">
+            </TextView>
+            <TextView
+                android:drawableLeft="@drawable/address_icon"
+                android:drawablePadding="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Số 1 Đại Cồ Việt, phường Bách Khoa, quận Hai Bà Trưng, Hà Nội"
+                android:textSize="20sp"
+                android:textColor="#000000"
+                android:textAlignment="inherit"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginTop="8dp">
+            </TextView>
+            <TextView
+                android:drawableLeft="@drawable/phone_icon"
+                android:drawablePadding="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0362326317"
+                android:textSize="20sp"
+                android:textColor="#000000"
+                android:textAlignment="inherit"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginTop="8dp">
+            </TextView>
+            <TextView
+                android:drawableLeft="@drawable/mail_icon"
+                android:drawablePadding="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="hotro@ebayorder.com"
+                android:textSize="20sp"
+                android:textColor="#000000"
+                android:textAlignment="inherit"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginTop="8dp">
+            </TextView>
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
