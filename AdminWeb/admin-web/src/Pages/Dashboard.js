@@ -19,6 +19,7 @@ import {
   ShoppingCart,
 } from "@material-ui/icons";
 import logo from "../media/logo.png";
+import HomeFragment from "../Fragment/HomeFragment";
 
 const drawerWidth = 240;
 
@@ -121,6 +122,7 @@ export default function ClippedDrawer() {
       </Drawer>
       <main className={classes.content}>
         <Toolbar />
+        <HomeFragment />
       </main>
     </div>
   );

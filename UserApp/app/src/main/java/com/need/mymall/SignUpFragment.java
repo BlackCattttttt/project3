@@ -31,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -227,10 +228,11 @@ public class SignUpFragment extends Fragment {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    Map<Object,String> userdata = new HashMap<>();
+                                    Map<String,Object> userdata = new HashMap<>();
                                     userdata.put("fullname",fullname.getText().toString());
                                     userdata.put("email",email.getText().toString());
                                     userdata.put("profile","");
+                                    userdata.put("create_at", FieldValue.serverTimestamp());
                                     firebaseFirestore.collection("USERS").document(firebaseAuth.getUid())
                                             .set(userdata)
                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
