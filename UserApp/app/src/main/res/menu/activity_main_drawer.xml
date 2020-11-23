@@ -16,6 +16,10 @@
             android:icon="@mipmap/cart_black"
             android:title="Giỏ hàng của tôi">
         </item>
+        <item android:id="@+id/nav_price_list"
+            android:icon="@mipmap/pricelist_icon"
+            android:title="Bảng giá cước">
+        </item>
         <item android:id="@+id/nav_my_acc"
             android:icon="@mipmap/my_account"
             android:title="Thông tin tài khoản">

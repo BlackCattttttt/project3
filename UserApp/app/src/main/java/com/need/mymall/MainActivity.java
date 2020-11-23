@@ -119,6 +119,10 @@ public class MainActivity extends AppCompatActivity {
                                 gotoFragment("My Order",new MyOrdersFragment(),ORDER_FRAGMENT);
                             } else if (id == R.id.nav_my_cart) {
                                 gotoFragment("My Cart",new MyCartFragment(),CART_FRAGMENT);
+                            } else if (id == R.id.nav_price_list) {
+                                Intent priceListIntent = new Intent(MainActivity.this,PriceListActivity.class);
+                                priceListIntent.putExtra("CategoryName","Bảng giá cước");
+                                startActivity(priceListIntent);
                             } else if (id == R.id.nav_my_acc) {
                                 gotoFragment("My Account",new MyAccountFragment(),ACC_FRAGMENT);
                             } else if (id == R.id.nav_sign_out) {
@@ -330,8 +334,12 @@ public class MainActivity extends AppCompatActivity {
             startActivity(searchIntent);
             return true;
         } else if (id == R.id.main_notification_icon) {
-            Intent notificationIntent = new Intent(MainActivity.this,NotificationActivity.class);
-            startActivity(notificationIntent);
+            if (curentUser==null) {
+                signInDialog.show();
+            } else {
+                Intent notificationIntent = new Intent(MainActivity.this, NotificationActivity.class);
+                startActivity(notificationIntent);
+            }
             return true;
         } else if (id == R.id.main_cart_icon) {
             if (curentUser==null) {
