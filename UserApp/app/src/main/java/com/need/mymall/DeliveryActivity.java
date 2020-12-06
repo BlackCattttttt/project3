@@ -260,6 +260,8 @@ public class DeliveryActivity extends AppCompatActivity {
                 orderDetails.put("product_price_"+String.valueOf(index), cartItemModel.getProductPrice());
                 orderDetails.put("product_des_"+String.valueOf(index), cartItemModel.getProductDes());
                 orderDetails.put("category_ID_"+String.valueOf(index), cartItemModel.getCategoryId());
+                orderDetails.put("product_weight_"+String.valueOf(index), 0.5);
+                orderDetails.put("transportfee_"+String.valueOf(index), (Double.parseDouble(cartItemModel.getProductTransportFee())/0.5));
                 index++;
             }
         }

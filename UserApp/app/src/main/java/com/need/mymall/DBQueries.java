@@ -255,8 +255,8 @@ public class DBQueries {
 
                                                     String orderStatus = snapshot.getString("order_status");
                                                     long totalItem = (long) snapshot.get("total_item");
-                                                    String totalAmount = snapshot.getString("total_amount");
-                                                    String deposit = snapshot.getString("deposit");
+                                                    String totalAmount =String.valueOf( snapshot.get("total_amount"));
+                                                    String deposit = String.valueOf(snapshot.get("deposit"));
                                                     String orderId = snapshot.getString("order_ID");
 
                                                     long totalProduct = snapshot.getLong("list_size");
@@ -267,7 +267,7 @@ public class DBQueries {
                                                         EbayAPI ebayAPI = new EbayAPI();
                                                         ProductDatabase product = new ProductDatabase();
                                                         product = ebayAPI.getItem(productId);
-                                                        String productPrice = snapshot.getString("product_price_"+String.valueOf(x));
+                                                        String productPrice = String.valueOf(snapshot.get("product_price_"+String.valueOf(x)));
                                                         long quantity = (long) snapshot.get("product_quantity_"+String.valueOf(x));
 
                                                         productOrders.add(new ProductOrder(product.getImagesUrl().get(0),product.getTitle(),(int)quantity,productPrice));

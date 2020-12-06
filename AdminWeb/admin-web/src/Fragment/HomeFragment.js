@@ -30,6 +30,7 @@ export class HomeFragment extends Component {
       let day = new Date(curr.setDate(first)).toISOString().slice(0, 10);
       week.push(day);
     }
+    //console.log(week);
     let createAt = [];
     let userData = [];
     firestore

@@ -2,7 +2,7 @@ import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import Authenticated from "./Component/Authenticated";
 import Dashboard from "./Pages/Dashboard";
-import login from "./Pages/login";
+import Login from "./Pages/Login";
 
 function App() {
   return (
@@ -12,9 +12,9 @@ function App() {
           <Dashboard />
         </Authenticated>
       </Route>
-      <Route exact path="/login" component={login}>
+      <Route exact path="/login" component={Login}>
         <Authenticated nonAuthenticated={true}>
-          <login />
+          <Login />
         </Authenticated>
       </Route>
       <Route path="*" render={() => "404 Not found!"} />

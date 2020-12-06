@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
@@ -20,6 +20,8 @@ import {
 } from "@material-ui/icons";
 import logo from "../media/logo.png";
 import HomeFragment from "../Fragment/HomeFragment";
+import CategoryManagerFragment from "../Fragment/CategoryManagerFragment";
+import OrderFragment from "../Fragment/OrderFragment";
 
 const drawerWidth = 240;
 
@@ -48,6 +50,20 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ClippedDrawer() {
   const classes = useStyles();
+  const [fragment, setfragment] = useState("HOME");
+
+  const loadFragment = () => {
+    switch (fragment) {
+      case "HOME":
+        return <HomeFragment />;
+      case "MANAGER_CATEGORY":
+        return <CategoryManagerFragment />;
+      case "MANAGER_ORDER":
+        return <OrderFragment />;
+      default:
+        break;
+    }
+  };
 
   return (
     <div className={classes.root}>
@@ -79,19 +95,19 @@ export default function ClippedDrawer() {
         <Toolbar />
         <div className={classes.drawerContainer}>
           <List>
-            <ListItem button>
+            <ListItem button onClick={(e) => setfragment("HOME")}>
               <ListItemIcon>
                 <Home />
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>
-            <ListItem button>
+            <ListItem button onClick={(e) => setfragment("MANAGER_CATEGORY")}>
               <ListItemIcon>
                 <Category />
               </ListItemIcon>
               <ListItemText primary="Categories" />
             </ListItem>
-            <ListItem button>
+            <ListItem button onClick={(e) => setfragment("MANAGER_ORDER")}>
               <ListItemIcon>
                 <ShoppingCart />
               </ListItemIcon>
@@ -122,7 +138,7 @@ export default function ClippedDrawer() {
       </Drawer>
       <main className={classes.content}>
         <Toolbar />
-        <HomeFragment />
+        {loadFragment()}
       </main>
     </div>
   );

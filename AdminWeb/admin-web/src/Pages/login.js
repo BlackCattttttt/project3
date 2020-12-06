@@ -10,7 +10,7 @@ import { firebaseAuth, firestore } from "../firebase";
 import React, { Component } from "react";
 import logo from "../media/logo.png";
 
-class login extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
 
@@ -141,4 +141,4 @@ class login extends Component {
   }
 }
 
-export default login;
+export default Login;
