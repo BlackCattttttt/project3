@@ -22,6 +22,7 @@ import logo from "../media/logo.png";
 import HomeFragment from "../Fragment/HomeFragment";
 import CategoryManagerFragment from "../Fragment/CategoryManagerFragment";
 import OrderFragment from "../Fragment/OrderFragment";
+import UserFragment from "../Fragment/UserFragment";
 
 const drawerWidth = 240;
 
@@ -60,6 +61,8 @@ export default function ClippedDrawer() {
         return <CategoryManagerFragment />;
       case "MANAGER_ORDER":
         return <OrderFragment />;
+      case "MANAGER_USER":
+        return <UserFragment />;
       default:
         break;
     }
@@ -113,7 +116,7 @@ export default function ClippedDrawer() {
               </ListItemIcon>
               <ListItemText primary="Orders" />
             </ListItem>
-            <ListItem button>
+            <ListItem button onClick={(e) => setfragment("MANAGER_USER")}>
               <ListItemIcon>
                 <Person />
               </ListItemIcon>

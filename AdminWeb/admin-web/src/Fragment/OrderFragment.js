@@ -23,6 +23,8 @@ import LastPageIcon from "@material-ui/icons/LastPage";
 import {
   Avatar,
   Button,
+  Card,
+  CardContent,
   Container,
   Grid,
   TextField,
@@ -672,193 +674,198 @@ class OrderFragment extends Component {
           />
         ) : null}
         <Container maxWidth="lg">
-          <Box
-            bgcolor="white"
-            boxShadow="3"
-            borderRadius="2px"
-            p="8px"
-            mt="0px"
-          >
-            <Grid container spacing={3}>
-              <Grid item xs={3}>
-                <Typography variant="h6" gutterBottom>
-                  Chọn tình trạng đơn hàng:
-                </Typography>
-              </Grid>
-              <Grid item xs={9}>
-                <SelectTextField orderStatus={this.setOrderStatus} />
-              </Grid>
-            </Grid>
-          </Box>
+          <Card>
+            <CardContent>
+              <Typography variant="h4">Danh sách đơn hàng</Typography>
+              <Box
+                bgcolor="white"
+                boxShadow="3"
+                borderRadius="2px"
+                p="8px"
+                mt="0px"
+              >
+                <Grid container spacing={3}>
+                  <Grid item xs={3}>
+                    <Typography variant="h6" gutterBottom>
+                      Chọn tình trạng đơn hàng:
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={9}>
+                    <SelectTextField orderStatus={this.setOrderStatus} />
+                  </Grid>
+                </Grid>
+              </Box>
 
-          {this.state.visiblity1 ? (
-            <Box
-              bgcolor="white"
-              boxShadow="3"
-              borderRadius="2px"
-              p="8px"
-              mt="15px"
-            >
-              <Typography
-                variant="h6"
-                style={{
-                  marginLeft: "20px",
-                  marginTop: "20px",
-                  color: "black",
-                }}
-              >
-                {this.state.orderStatus}
-              </Typography>
-              <CollapsibleTable
-                rows={this.state.orderd}
-                showOrderDetail={this.setShowOrderDetail}
-              />
-            </Box>
-          ) : null}
-          {this.state.visiblity2 ? (
-            <Box
-              bgcolor="white"
-              boxShadow="3"
-              borderRadius="2px"
-              p="8px"
-              mt="15px"
-            >
-              <Typography
-                variant="h6"
-                style={{
-                  marginLeft: "20px",
-                  marginTop: "20px",
-                  color: "black",
-                }}
-              >
-                {this.state.orderStatus}
-              </Typography>
-              <CollapsibleTable
-                rows={this.state.payed}
-                showOrderDetail={this.setShowOrderDetail}
-              />
-            </Box>
-          ) : null}
-          {this.state.visiblity3 ? (
-            <Box
-              bgcolor="white"
-              boxShadow="3"
-              borderRadius="2px"
-              p="8px"
-              mt="15px"
-            >
-              <Typography
-                variant="h6"
-                style={{
-                  marginLeft: "20px",
-                  marginTop: "20px",
-                  color: "black",
-                }}
-              >
-                {this.state.orderStatus}
-              </Typography>
-              <CollapsibleTable
-                rows={this.state.packed}
-                showOrderDetail={this.setShowOrderDetail}
-              />
-            </Box>
-          ) : null}
-          {this.state.visiblity4 ? (
-            <Box
-              bgcolor="white"
-              boxShadow="3"
-              borderRadius="2px"
-              p="8px"
-              mt="15px"
-            >
-              <Typography
-                variant="h6"
-                style={{
-                  marginLeft: "20px",
-                  marginTop: "20px",
-                  color: "black",
-                }}
-              >
-                {this.state.orderStatus}
-              </Typography>
-              <CollapsibleTable
-                rows={this.state.usa_shiped}
-                showOrderDetail={this.setShowOrderDetail}
-              />
-            </Box>
-          ) : null}
-          {this.state.visiblity5 ? (
-            <Box
-              bgcolor="white"
-              boxShadow="3"
-              borderRadius="2px"
-              p="8px"
-              mt="15px"
-            >
-              <Typography
-                variant="h6"
-                style={{
-                  marginLeft: "20px",
-                  marginTop: "20px",
-                  color: "black",
-                }}
-              >
-                {this.state.orderStatus}
-              </Typography>
-              <CollapsibleTable
-                rows={this.state.vn_shiped}
-                showOrderDetail={this.setShowOrderDetail}
-              />
-            </Box>
-          ) : null}
-          {this.state.visiblity6 ? (
-            <Box
-              bgcolor="white"
-              boxShadow="3"
-              borderRadius="2px"
-              p="8px"
-              mt="15px"
-            >
-              <Typography
-                variant="h6"
-                style={{
-                  marginLeft: "20px",
-                  marginTop: "20px",
-                  color: "black",
-                }}
-              >
-                {this.state.orderStatus}
-              </Typography>
-              <CollapsibleTable
-                rows={this.state.deliveried}
-                showOrderDetail={this.setShowOrderDetail}
-              />
-            </Box>
-          ) : null}
-          {this.state.visiblity7 ? (
-            <Box
-              bgcolor="white"
-              boxShadow="3"
-              borderRadius="2px"
-              p="8px"
-              mt="15px"
-            >
-              <Typography
-                variant="h6"
-                style={{
-                  marginLeft: "20px",
-                  marginTop: "20px",
-                  color: "black",
-                }}
-              >
-                {this.state.orderStatus}
-              </Typography>
-              <CollapsibleTable
-                rows={this.state.cancel}
-                showOrderDetail={this.setShowOrderDetail}
-              />
-            </Box>
-          ) : null}
+              {this.state.visiblity1 ? (
+                <Box
+                  bgcolor="white"
+                  boxShadow="3"
+                  borderRadius="2px"
+                  p="8px"
+                  mt="15px"
+                >
+                  <Typography
+                    variant="h6"
+                    style={{
+                      marginLeft: "20px",
+                      marginTop: "20px",
+                      color: "black",
+                    }}
+                  >
+                    {this.state.orderStatus}
+                  </Typography>
+                  <CollapsibleTable
+                    rows={this.state.orderd}
+                    showOrderDetail={this.setShowOrderDetail}
+                  />
+                </Box>
+              ) : null}
+              {this.state.visiblity2 ? (
+                <Box
+                  bgcolor="white"
+                  boxShadow="3"
+                  borderRadius="2px"
+                  p="8px"
+                  mt="15px"
+                >
+                  <Typography
+                    variant="h6"
+                    style={{
+                      marginLeft: "20px",
+                      marginTop: "20px",
+                      color: "black",
+                    }}
+                  >
+                    {this.state.orderStatus}
+                  </Typography>
+                  <CollapsibleTable
+                    rows={this.state.payed}
+                    showOrderDetail={this.setShowOrderDetail}
+                  />
+                </Box>
+              ) : null}
+              {this.state.visiblity3 ? (
+                <Box
+                  bgcolor="white"
+                  boxShadow="3"
+                  borderRadius="2px"
+                  p="8px"
+                  mt="15px"
+                >
+                  <Typography
+                    variant="h6"
+                    style={{
+                      marginLeft: "20px",
+                      marginTop: "20px",
+                      color: "black",
+                    }}
+                  >
+                    {this.state.orderStatus}
+                  </Typography>
+                  <CollapsibleTable
+                    rows={this.state.packed}
+                    showOrderDetail={this.setShowOrderDetail}
+                  />
+                </Box>
+              ) : null}
+              {this.state.visiblity4 ? (
+                <Box
+                  bgcolor="white"
+                  boxShadow="3"
+                  borderRadius="2px"
+                  p="8px"
+                  mt="15px"
+                >
+                  <Typography
+                    variant="h6"
+                    style={{
+                      marginLeft: "20px",
+                      marginTop: "20px",
+                      color: "black",
+                    }}
+                  >
+                    {this.state.orderStatus}
+                  </Typography>
+                  <CollapsibleTable
+                    rows={this.state.usa_shiped}
+                    showOrderDetail={this.setShowOrderDetail}
+                  />
+                </Box>
+              ) : null}
+              {this.state.visiblity5 ? (
+                <Box
+                  bgcolor="white"
+                  boxShadow="3"
+                  borderRadius="2px"
+                  p="8px"
+                  mt="15px"
+                >
+                  <Typography
+                    variant="h6"
+                    style={{
+                      marginLeft: "20px",
+                      marginTop: "20px",
+                      color: "black",
+                    }}
+                  >
+                    {this.state.orderStatus}
+                  </Typography>
+                  <CollapsibleTable
+                    rows={this.state.vn_shiped}
+                    showOrderDetail={this.setShowOrderDetail}
+                  />
+                </Box>
+              ) : null}
+              {this.state.visiblity6 ? (
+                <Box
+                  bgcolor="white"
+                  boxShadow="3"
+                  borderRadius="2px"
+                  p="8px"
+                  mt="15px"
+                >
+                  <Typography
+                    variant="h6"
+                    style={{
+                      marginLeft: "20px",
+                      marginTop: "20px",
+                      color: "black",
+                    }}
+                  >
+                    {this.state.orderStatus}
+                  </Typography>
+                  <CollapsibleTable
+                    rows={this.state.deliveried}
+                    showOrderDetail={this.setShowOrderDetail}
+                  />
+                </Box>
+              ) : null}
+              {this.state.visiblity7 ? (
+                <Box
+                  bgcolor="white"
+                  boxShadow="3"
+                  borderRadius="2px"
+                  p="8px"
+                  mt="15px"
+                >
+                  <Typography
+                    variant="h6"
+                    style={{
+                      marginLeft: "20px",
+                      marginTop: "20px",
+                      color: "black",
+                    }}
+                  >
+                    {this.state.orderStatus}
+                  </Typography>
+                  <CollapsibleTable
+                    rows={this.state.cancel}
+                    showOrderDetail={this.setShowOrderDetail}
+                  />
+                </Box>
+              ) : null}
+            </CardContent>
+          </Card>
         </Container>
       </div>
     );

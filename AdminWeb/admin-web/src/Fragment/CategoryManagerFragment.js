@@ -8,7 +8,13 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { firestore } from "../firebase";
-import { Container, Box, Typography } from "@material-ui/core";
+import {
+  Container,
+  Box,
+  Typography,
+  Card,
+  CardContent,
+} from "@material-ui/core";
 import { Edit } from "@material-ui/icons";
 import { blue } from "@material-ui/core/colors";
 import { Button, Grid, TextField } from "@material-ui/core";
@@ -16,8 +22,8 @@ import { Alert } from "@material-ui/lab";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
+    backgroundColor: theme.palette.common.white,
+    color: theme.palette.common.black,
   },
   body: {
     fontSize: 14,
@@ -241,55 +247,60 @@ class CategoryManagerFragment extends Component {
         ) : null}
         <br />
         <Container maxWidth="lg" minWidth="md" fixed>
-          <TableContainer component={Paper}>
-            <Table
-              className={this.state.classes.table}
-              aria-label="customized table"
-            >
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell width="100">STT</StyledTableCell>
-                  <StyledTableCell align="left" width="600">
-                    Loại mặt hàng
-                  </StyledTableCell>
-                  <StyledTableCell align="left" width="300">
-                    Giá vận chuyển(kg)
-                  </StyledTableCell>
-                  <StyledTableCell align="left" width="300">
-                    Phụ thu
-                  </StyledTableCell>
-                  <StyledTableCell width="200" align="center">
-                    Sửa
-                  </StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {this.state.rows.map((row) => (
-                  <StyledTableRow key={row.id}>
-                    <StyledTableCell width="100">{row.id}</StyledTableCell>
-                    <StyledTableCell align="left" width="600">
-                      {row.name}
-                    </StyledTableCell>
-                    <StyledTableCell align="left" width="300">
-                      ${row.price}/kg
-                    </StyledTableCell>
-                    <StyledTableCell align="left" width="300">
-                      {row.surchage}
-                    </StyledTableCell>
-                    <StyledTableCell width="200" align="center">
-                      <Edit fontSize="small" />
-                      <span
-                        style={{ fontSize: 14, color: blue, margin: 2 }}
-                        onClick={() => this.edit(row.id)}
-                      >
-                        <u>Sửa</u>
-                      </span>
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <Card>
+            <CardContent>
+              <Typography variant="h4">Danh sách loại mặt hàng</Typography>
+              <TableContainer component={Paper}>
+                <Table
+                  className={this.state.classes.table}
+                  aria-label="customized table"
+                >
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell width="100">STT</StyledTableCell>
+                      <StyledTableCell align="left" width="600">
+                        Loại mặt hàng
+                      </StyledTableCell>
+                      <StyledTableCell align="left" width="300">
+                        Giá vận chuyển(kg)
+                      </StyledTableCell>
+                      <StyledTableCell align="left" width="300">
+                        Phụ thu
+                      </StyledTableCell>
+                      <StyledTableCell width="200" align="center">
+                        Sửa
+                      </StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {this.state.rows.map((row) => (
+                      <StyledTableRow key={row.id}>
+                        <StyledTableCell width="100">{row.id}</StyledTableCell>
+                        <StyledTableCell align="left" width="600">
+                          {row.name}
+                        </StyledTableCell>
+                        <StyledTableCell align="left" width="300">
+                          ${row.price}/kg
+                        </StyledTableCell>
+                        <StyledTableCell align="left" width="300">
+                          {row.surchage}
+                        </StyledTableCell>
+                        <StyledTableCell width="200" align="center">
+                          <Edit fontSize="small" />
+                          <span
+                            style={{ fontSize: 14, color: blue, margin: 2 }}
+                            onClick={() => this.edit(row.id)}
+                          >
+                            <u>Sửa</u>
+                          </span>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </CardContent>
+          </Card>
         </Container>
         {this.state.showEditDialog ? (
           <div
