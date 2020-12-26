@@ -62,6 +62,8 @@
 
             <include layout="@layout/deliverystatus_detail_layout"></include>
 
+            <include layout="@layout/order_detail_weight_layout"></include>
+
             <include layout="@layout/amount_detail_layout"></include>
 
             <include layout="@layout/order_detail_layout"></include>

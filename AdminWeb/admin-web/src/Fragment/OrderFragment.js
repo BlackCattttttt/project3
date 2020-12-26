@@ -289,7 +289,7 @@ function Row(props) {
                     <TableCell width="400">Tên sản phẩm</TableCell>
                     <TableCell>Hình ảnh</TableCell>
                     <TableCell>Mô tả</TableCell>
-                    <TableCell align="right">Khối lượng(kg)</TableCell>
+                    <TableCell align="right">Khối lượng(1 sản phẩm)</TableCell>
                     <TableCell width="100" align="right">
                       Số lượng
                     </TableCell>

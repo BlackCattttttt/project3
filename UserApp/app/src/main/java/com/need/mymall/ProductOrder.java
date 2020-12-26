@@ -5,12 +5,16 @@ public class ProductOrder {
     String productTitle;
     int productQuantity;
     String productPrice;
+    double productWeight;
+    double productTransportfee;
 
-    public ProductOrder(String productImg, String productTitle, int productQuantity, String productPrice) {
+    public ProductOrder(String productImg, String productTitle, int productQuantity, String productPrice, double productWeight, double productTransportfee) {
         this.productImg = productImg;
         this.productTitle = productTitle;
         this.productQuantity = productQuantity;
         this.productPrice = productPrice;
+        this.productWeight = productWeight;
+        this.productTransportfee = productTransportfee;
     }
 
     public String getProductImg() {
@@ -43,5 +47,21 @@ public class ProductOrder {
 
     public void setProductPrice(String productPrice) {
         this.productPrice = productPrice;
+    }
+
+    public double getProductWeight() {
+        return productWeight;
+    }
+
+    public void setProductWeight(double productWeight) {
+        this.productWeight = productWeight;
+    }
+
+    public double getProductTransportfee() {
+        return productTransportfee;
+    }
+
+    public void setProductTransportfee(double productTransportfee) {
+        this.productTransportfee = productTransportfee;
     }
 }

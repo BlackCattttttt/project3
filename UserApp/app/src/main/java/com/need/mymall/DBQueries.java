@@ -45,6 +45,14 @@ public class DBQueries {
 
     public static ArrayList<MyOrderItemModel> myOrderItemModelArrayList = new ArrayList<>();
 
+    public static ArrayList<MyOrderItemModel> orderd = new ArrayList<>();
+    public static ArrayList<MyOrderItemModel> payed  = new ArrayList<>();
+    public static ArrayList<MyOrderItemModel> packed = new ArrayList<>();
+    public static ArrayList<MyOrderItemModel> ship_usa = new ArrayList<>();
+    public static ArrayList<MyOrderItemModel> ship_vn = new ArrayList<>();
+    public static ArrayList<MyOrderItemModel> delivery = new ArrayList<>();
+    public static ArrayList<MyOrderItemModel> cancel = new ArrayList<>();
+
     public static ArrayList<NotificationModel> notificationModelArrayList = new ArrayList<>();
     private static ListenerRegistration registration;
 
@@ -269,8 +277,10 @@ public class DBQueries {
                                                         product = ebayAPI.getItem(productId);
                                                         String productPrice = String.valueOf(snapshot.get("product_price_"+String.valueOf(x)));
                                                         long quantity = (long) snapshot.get("product_quantity_"+String.valueOf(x));
+                                                        double weight = snapshot.getDouble("product_weight_"+String.valueOf(x));
+                                                        double transportfee = snapshot.getDouble("transportfee_"+String.valueOf(x));
 
-                                                        productOrders.add(new ProductOrder(product.getImagesUrl().get(0),product.getTitle(),(int)quantity,productPrice));
+                                                        productOrders.add(new ProductOrder(product.getImagesUrl().get(0),product.getTitle(),(int)quantity,productPrice,weight,transportfee));
                                                     }
 
                                                     Date orderedDate = snapshot.getDate("ordered_date");
@@ -291,6 +301,573 @@ public class DBQueries {
                                                             orderedDate,payedDate,packedDate,shipedUsaDate,shipedVnDate,deliveriedDate,cancelledDate,userId);
                                                     myOrderItemModel.setDelivery(fullname,phoneNum,address);
                                                     myOrderItemModelArrayList.add(myOrderItemModel);
+
+                                                    if (myOrderAdapter != null) {
+                                                        myOrderAdapter.notifyDataSetChanged();
+                                                    }
+                                                } else {
+                                                    String error = task.getException().getMessage();
+                                                    Toast.makeText(context,error,Toast.LENGTH_LONG).show();
+                                                }
+                                                loadingDialog.dismiss();
+                                            }
+                                        });
+                            }
+                            loadingDialog.dismiss();
+                        } else {
+                            loadingDialog.dismiss();
+                            String error = task.getException().getMessage();
+                            Toast.makeText(context,error,Toast.LENGTH_LONG).show();
+                        }
+                        //loadingDialog.dismiss();
+                    }
+                });
+    }
+    public static void loadOrderdOrders (final Context context, final Dialog loadingDialog,@Nullable final MyOrderAdapter myOrderAdapter) {
+        orderd.clear();
+
+        firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_ORDER").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (final QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                firebaseFirestore.collection("ORDERS").document(documentSnapshot.getString("order_id")).get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @RequiresApi(api = Build.VERSION_CODES.O)
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    DocumentSnapshot snapshot = task.getResult();
+
+                                                    String orderStatus = snapshot.getString("order_status");
+                                                    if (orderStatus.equals("Đã tạo")) {
+                                                        long totalItem = (long) snapshot.get("total_item");
+                                                        String totalAmount = String.valueOf(snapshot.get("total_amount"));
+                                                        String deposit = String.valueOf(snapshot.get("deposit"));
+                                                        String orderId = snapshot.getString("order_ID");
+
+                                                        long totalProduct = snapshot.getLong("list_size");
+
+                                                        ArrayList<ProductOrder> productOrders = new ArrayList<>();
+                                                        for (int x = 0; x < totalProduct; x++) {
+                                                            String productId = snapshot.getString("product_ID_" + String.valueOf(x));
+                                                            EbayAPI ebayAPI = new EbayAPI();
+                                                            ProductDatabase product = new ProductDatabase();
+                                                            product = ebayAPI.getItem(productId);
+                                                            String productPrice = String.valueOf(snapshot.get("product_price_" + String.valueOf(x)));
+                                                            long quantity = (long) snapshot.get("product_quantity_" + String.valueOf(x));
+                                                            double weight = snapshot.getDouble("product_weight_" + String.valueOf(x));
+                                                            double transportfee = snapshot.getDouble("transportfee_" + String.valueOf(x));
+
+                                                            productOrders.add(new ProductOrder(product.getImagesUrl().get(0), product.getTitle(), (int) quantity, productPrice, weight, transportfee));
+                                                        }
+
+                                                        Date orderedDate = snapshot.getDate("ordered_date");
+                                                        Date payedDate = snapshot.getDate("payed_date");
+                                                        Date packedDate = snapshot.getDate("packed_date");
+                                                        Date shipedUsaDate = snapshot.getDate("shiped_usa_date");
+                                                        Date shipedVnDate = snapshot.getDate("shiped_vn_date");
+                                                        Date deliveriedDate = snapshot.getDate("delivery_date");
+                                                        Date cancelledDate = snapshot.getDate("cancelled_date");
+
+                                                        String fullname = snapshot.getString("fullname");
+                                                        String phoneNum = snapshot.getString("phone_number");
+                                                        String address = snapshot.getString("address");
+
+                                                        String userId = snapshot.getString("user_ID");
+
+                                                        MyOrderItemModel myOrderItemModel = new MyOrderItemModel(orderStatus, (int) totalItem, totalAmount, deposit, orderId, (int) totalProduct, productOrders,
+                                                                orderedDate, payedDate, packedDate, shipedUsaDate, shipedVnDate, deliveriedDate, cancelledDate, userId);
+                                                        myOrderItemModel.setDelivery(fullname, phoneNum, address);
+                                                        orderd.add(myOrderItemModel);
+                                                    }
+
+                                                    if (myOrderAdapter != null) {
+                                                        myOrderAdapter.notifyDataSetChanged();
+                                                    }
+                                                } else {
+                                                    String error = task.getException().getMessage();
+                                                    Toast.makeText(context,error,Toast.LENGTH_LONG).show();
+                                                }
+                                                loadingDialog.dismiss();
+                                            }
+                                        });
+                            }
+                            loadingDialog.dismiss();
+                        } else {
+                            loadingDialog.dismiss();
+                            String error = task.getException().getMessage();
+                            Toast.makeText(context,error,Toast.LENGTH_LONG).show();
+                        }
+                        //loadingDialog.dismiss();
+                    }
+                });
+    }
+    public static void loadPayedOrders (final Context context, final Dialog loadingDialog,@Nullable final MyOrderAdapter myOrderAdapter) {
+        payed.clear();
+
+        firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_ORDER").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (final QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                firebaseFirestore.collection("ORDERS").document(documentSnapshot.getString("order_id")).get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @RequiresApi(api = Build.VERSION_CODES.O)
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    DocumentSnapshot snapshot = task.getResult();
+
+                                                    String orderStatus = snapshot.getString("order_status");
+                                                    if (orderStatus.equals("Đã thanh toán")) {
+                                                        long totalItem = (long) snapshot.get("total_item");
+                                                        String totalAmount = String.valueOf(snapshot.get("total_amount"));
+                                                        String deposit = String.valueOf(snapshot.get("deposit"));
+                                                        String orderId = snapshot.getString("order_ID");
+
+                                                        long totalProduct = snapshot.getLong("list_size");
+
+                                                        ArrayList<ProductOrder> productOrders = new ArrayList<>();
+                                                        for (int x = 0; x < totalProduct; x++) {
+                                                            String productId = snapshot.getString("product_ID_" + String.valueOf(x));
+                                                            EbayAPI ebayAPI = new EbayAPI();
+                                                            ProductDatabase product = new ProductDatabase();
+                                                            product = ebayAPI.getItem(productId);
+                                                            String productPrice = String.valueOf(snapshot.get("product_price_" + String.valueOf(x)));
+                                                            long quantity = (long) snapshot.get("product_quantity_" + String.valueOf(x));
+                                                            double weight = snapshot.getDouble("product_weight_" + String.valueOf(x));
+                                                            double transportfee = snapshot.getDouble("transportfee_" + String.valueOf(x));
+
+                                                            productOrders.add(new ProductOrder(product.getImagesUrl().get(0), product.getTitle(), (int) quantity, productPrice, weight, transportfee));
+                                                        }
+
+                                                        Date orderedDate = snapshot.getDate("ordered_date");
+                                                        Date payedDate = snapshot.getDate("payed_date");
+                                                        Date packedDate = snapshot.getDate("packed_date");
+                                                        Date shipedUsaDate = snapshot.getDate("shiped_usa_date");
+                                                        Date shipedVnDate = snapshot.getDate("shiped_vn_date");
+                                                        Date deliveriedDate = snapshot.getDate("delivery_date");
+                                                        Date cancelledDate = snapshot.getDate("cancelled_date");
+
+                                                        String fullname = snapshot.getString("fullname");
+                                                        String phoneNum = snapshot.getString("phone_number");
+                                                        String address = snapshot.getString("address");
+
+                                                        String userId = snapshot.getString("user_ID");
+
+                                                        MyOrderItemModel myOrderItemModel = new MyOrderItemModel(orderStatus, (int) totalItem, totalAmount, deposit, orderId, (int) totalProduct, productOrders,
+                                                                orderedDate, payedDate, packedDate, shipedUsaDate, shipedVnDate, deliveriedDate, cancelledDate, userId);
+                                                        myOrderItemModel.setDelivery(fullname, phoneNum, address);
+                                                        payed.add(myOrderItemModel);
+                                                    }
+
+                                                    if (myOrderAdapter != null) {
+                                                        myOrderAdapter.notifyDataSetChanged();
+                                                    }
+                                                } else {
+                                                    String error = task.getException().getMessage();
+                                                    Toast.makeText(context,error,Toast.LENGTH_LONG).show();
+                                                }
+                                                loadingDialog.dismiss();
+                                            }
+                                        });
+                            }
+                            loadingDialog.dismiss();
+                        } else {
+                            loadingDialog.dismiss();
+                            String error = task.getException().getMessage();
+                            Toast.makeText(context,error,Toast.LENGTH_LONG).show();
+                        }
+                        //loadingDialog.dismiss();
+                    }
+                });
+    }
+    public static void loadPackedOrders (final Context context, final Dialog loadingDialog,@Nullable final MyOrderAdapter myOrderAdapter) {
+        packed.clear();
+
+        firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_ORDER").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (final QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                firebaseFirestore.collection("ORDERS").document(documentSnapshot.getString("order_id")).get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @RequiresApi(api = Build.VERSION_CODES.O)
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    DocumentSnapshot snapshot = task.getResult();
+
+                                                    String orderStatus = snapshot.getString("order_status");
+                                                    if (orderStatus.equals("[USA]Đã lấy hàng/Đã nhập kho")) {
+                                                        long totalItem = (long) snapshot.get("total_item");
+                                                        String totalAmount = String.valueOf(snapshot.get("total_amount"));
+                                                        String deposit = String.valueOf(snapshot.get("deposit"));
+                                                        String orderId = snapshot.getString("order_ID");
+
+                                                        long totalProduct = snapshot.getLong("list_size");
+
+                                                        ArrayList<ProductOrder> productOrders = new ArrayList<>();
+                                                        for (int x = 0; x < totalProduct; x++) {
+                                                            String productId = snapshot.getString("product_ID_" + String.valueOf(x));
+                                                            EbayAPI ebayAPI = new EbayAPI();
+                                                            ProductDatabase product = new ProductDatabase();
+                                                            product = ebayAPI.getItem(productId);
+                                                            String productPrice = String.valueOf(snapshot.get("product_price_" + String.valueOf(x)));
+                                                            long quantity = (long) snapshot.get("product_quantity_" + String.valueOf(x));
+                                                            double weight = snapshot.getDouble("product_weight_" + String.valueOf(x));
+                                                            double transportfee = snapshot.getDouble("transportfee_" + String.valueOf(x));
+
+                                                            productOrders.add(new ProductOrder(product.getImagesUrl().get(0), product.getTitle(), (int) quantity, productPrice, weight, transportfee));
+                                                        }
+
+                                                        Date orderedDate = snapshot.getDate("ordered_date");
+                                                        Date payedDate = snapshot.getDate("payed_date");
+                                                        Date packedDate = snapshot.getDate("packed_date");
+                                                        Date shipedUsaDate = snapshot.getDate("shiped_usa_date");
+                                                        Date shipedVnDate = snapshot.getDate("shiped_vn_date");
+                                                        Date deliveriedDate = snapshot.getDate("delivery_date");
+                                                        Date cancelledDate = snapshot.getDate("cancelled_date");
+
+                                                        String fullname = snapshot.getString("fullname");
+                                                        String phoneNum = snapshot.getString("phone_number");
+                                                        String address = snapshot.getString("address");
+
+                                                        String userId = snapshot.getString("user_ID");
+
+                                                        MyOrderItemModel myOrderItemModel = new MyOrderItemModel(orderStatus, (int) totalItem, totalAmount, deposit, orderId, (int) totalProduct, productOrders,
+                                                                orderedDate, payedDate, packedDate, shipedUsaDate, shipedVnDate, deliveriedDate, cancelledDate, userId);
+                                                        myOrderItemModel.setDelivery(fullname, phoneNum, address);
+                                                        packed.add(myOrderItemModel);
+                                                    }
+
+                                                    if (myOrderAdapter != null) {
+                                                        myOrderAdapter.notifyDataSetChanged();
+                                                    }
+                                                } else {
+                                                    String error = task.getException().getMessage();
+                                                    Toast.makeText(context,error,Toast.LENGTH_LONG).show();
+                                                }
+                                                loadingDialog.dismiss();
+                                            }
+                                        });
+                            }
+                            loadingDialog.dismiss();
+                        } else {
+                            loadingDialog.dismiss();
+                            String error = task.getException().getMessage();
+                            Toast.makeText(context,error,Toast.LENGTH_LONG).show();
+                        }
+                        //loadingDialog.dismiss();
+                    }
+                });
+    }
+    public static void loadShipUsaOrders (final Context context, final Dialog loadingDialog,@Nullable final MyOrderAdapter myOrderAdapter) {
+        ship_usa.clear();
+
+        firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_ORDER").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (final QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                firebaseFirestore.collection("ORDERS").document(documentSnapshot.getString("order_id")).get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @RequiresApi(api = Build.VERSION_CODES.O)
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    DocumentSnapshot snapshot = task.getResult();
+
+                                                    String orderStatus = snapshot.getString("order_status");
+                                                    if (orderStatus.equals("[VN]Đã lấy hàng/Đã nhập kho")) {
+                                                        long totalItem = (long) snapshot.get("total_item");
+                                                        String totalAmount = String.valueOf(snapshot.get("total_amount"));
+                                                        String deposit = String.valueOf(snapshot.get("deposit"));
+                                                        String orderId = snapshot.getString("order_ID");
+
+                                                        long totalProduct = snapshot.getLong("list_size");
+
+                                                        ArrayList<ProductOrder> productOrders = new ArrayList<>();
+                                                        for (int x = 0; x < totalProduct; x++) {
+                                                            String productId = snapshot.getString("product_ID_" + String.valueOf(x));
+                                                            EbayAPI ebayAPI = new EbayAPI();
+                                                            ProductDatabase product = new ProductDatabase();
+                                                            product = ebayAPI.getItem(productId);
+                                                            String productPrice = String.valueOf(snapshot.get("product_price_" + String.valueOf(x)));
+                                                            long quantity = (long) snapshot.get("product_quantity_" + String.valueOf(x));
+                                                            double weight = snapshot.getDouble("product_weight_" + String.valueOf(x));
+                                                            double transportfee = snapshot.getDouble("transportfee_" + String.valueOf(x));
+
+                                                            productOrders.add(new ProductOrder(product.getImagesUrl().get(0), product.getTitle(), (int) quantity, productPrice, weight, transportfee));
+                                                        }
+
+                                                        Date orderedDate = snapshot.getDate("ordered_date");
+                                                        Date payedDate = snapshot.getDate("payed_date");
+                                                        Date packedDate = snapshot.getDate("packed_date");
+                                                        Date shipedUsaDate = snapshot.getDate("shiped_usa_date");
+                                                        Date shipedVnDate = snapshot.getDate("shiped_vn_date");
+                                                        Date deliveriedDate = snapshot.getDate("delivery_date");
+                                                        Date cancelledDate = snapshot.getDate("cancelled_date");
+
+                                                        String fullname = snapshot.getString("fullname");
+                                                        String phoneNum = snapshot.getString("phone_number");
+                                                        String address = snapshot.getString("address");
+
+                                                        String userId = snapshot.getString("user_ID");
+
+                                                        MyOrderItemModel myOrderItemModel = new MyOrderItemModel(orderStatus, (int) totalItem, totalAmount, deposit, orderId, (int) totalProduct, productOrders,
+                                                                orderedDate, payedDate, packedDate, shipedUsaDate, shipedVnDate, deliveriedDate, cancelledDate, userId);
+                                                        myOrderItemModel.setDelivery(fullname, phoneNum, address);
+                                                        ship_usa.add(myOrderItemModel);
+                                                    }
+
+                                                    if (myOrderAdapter != null) {
+                                                        myOrderAdapter.notifyDataSetChanged();
+                                                    }
+                                                } else {
+                                                    String error = task.getException().getMessage();
+                                                    Toast.makeText(context,error,Toast.LENGTH_LONG).show();
+                                                }
+                                                loadingDialog.dismiss();
+                                            }
+                                        });
+                            }
+                            loadingDialog.dismiss();
+                        } else {
+                            loadingDialog.dismiss();
+                            String error = task.getException().getMessage();
+                            Toast.makeText(context,error,Toast.LENGTH_LONG).show();
+                        }
+                        //loadingDialog.dismiss();
+                    }
+                });
+    }
+    public static void loadShipVnOrders (final Context context, final Dialog loadingDialog,@Nullable final MyOrderAdapter myOrderAdapter) {
+        ship_vn.clear();
+
+        firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_ORDER").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (final QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                firebaseFirestore.collection("ORDERS").document(documentSnapshot.getString("order_id")).get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @RequiresApi(api = Build.VERSION_CODES.O)
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    DocumentSnapshot snapshot = task.getResult();
+
+                                                    String orderStatus = snapshot.getString("order_status");
+                                                    if (orderStatus.equals("[VN]Đã điều phối giao hàng/Đang giao hàng")) {
+                                                        long totalItem = (long) snapshot.get("total_item");
+                                                        String totalAmount = String.valueOf(snapshot.get("total_amount"));
+                                                        String deposit = String.valueOf(snapshot.get("deposit"));
+                                                        String orderId = snapshot.getString("order_ID");
+
+                                                        long totalProduct = snapshot.getLong("list_size");
+
+                                                        ArrayList<ProductOrder> productOrders = new ArrayList<>();
+                                                        for (int x = 0; x < totalProduct; x++) {
+                                                            String productId = snapshot.getString("product_ID_" + String.valueOf(x));
+                                                            EbayAPI ebayAPI = new EbayAPI();
+                                                            ProductDatabase product = new ProductDatabase();
+                                                            product = ebayAPI.getItem(productId);
+                                                            String productPrice = String.valueOf(snapshot.get("product_price_" + String.valueOf(x)));
+                                                            long quantity = (long) snapshot.get("product_quantity_" + String.valueOf(x));
+                                                            double weight = snapshot.getDouble("product_weight_" + String.valueOf(x));
+                                                            double transportfee = snapshot.getDouble("transportfee_" + String.valueOf(x));
+
+                                                            productOrders.add(new ProductOrder(product.getImagesUrl().get(0), product.getTitle(), (int) quantity, productPrice, weight, transportfee));
+                                                        }
+
+                                                        Date orderedDate = snapshot.getDate("ordered_date");
+                                                        Date payedDate = snapshot.getDate("payed_date");
+                                                        Date packedDate = snapshot.getDate("packed_date");
+                                                        Date shipedUsaDate = snapshot.getDate("shiped_usa_date");
+                                                        Date shipedVnDate = snapshot.getDate("shiped_vn_date");
+                                                        Date deliveriedDate = snapshot.getDate("delivery_date");
+                                                        Date cancelledDate = snapshot.getDate("cancelled_date");
+
+                                                        String fullname = snapshot.getString("fullname");
+                                                        String phoneNum = snapshot.getString("phone_number");
+                                                        String address = snapshot.getString("address");
+
+                                                        String userId = snapshot.getString("user_ID");
+
+                                                        MyOrderItemModel myOrderItemModel = new MyOrderItemModel(orderStatus, (int) totalItem, totalAmount, deposit, orderId, (int) totalProduct, productOrders,
+                                                                orderedDate, payedDate, packedDate, shipedUsaDate, shipedVnDate, deliveriedDate, cancelledDate, userId);
+                                                        myOrderItemModel.setDelivery(fullname, phoneNum, address);
+                                                        ship_vn.add(myOrderItemModel);
+                                                    }
+
+                                                    if (myOrderAdapter != null) {
+                                                        myOrderAdapter.notifyDataSetChanged();
+                                                    }
+                                                } else {
+                                                    String error = task.getException().getMessage();
+                                                    Toast.makeText(context,error,Toast.LENGTH_LONG).show();
+                                                }
+                                                loadingDialog.dismiss();
+                                            }
+                                        });
+                            }
+                            loadingDialog.dismiss();
+                        } else {
+                            loadingDialog.dismiss();
+                            String error = task.getException().getMessage();
+                            Toast.makeText(context,error,Toast.LENGTH_LONG).show();
+                        }
+                        //loadingDialog.dismiss();
+                    }
+                });
+    }
+    public static void loadDeliveryOrders (final Context context, final Dialog loadingDialog,@Nullable final MyOrderAdapter myOrderAdapter) {
+        delivery.clear();
+
+        firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_ORDER").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (final QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                firebaseFirestore.collection("ORDERS").document(documentSnapshot.getString("order_id")).get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @RequiresApi(api = Build.VERSION_CODES.O)
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    DocumentSnapshot snapshot = task.getResult();
+
+                                                    String orderStatus = snapshot.getString("order_status");
+                                                    if (orderStatus.equals("Đã giao hàng")) {
+                                                        long totalItem = (long) snapshot.get("total_item");
+                                                        String totalAmount = String.valueOf(snapshot.get("total_amount"));
+                                                        String deposit = String.valueOf(snapshot.get("deposit"));
+                                                        String orderId = snapshot.getString("order_ID");
+
+                                                        long totalProduct = snapshot.getLong("list_size");
+
+                                                        ArrayList<ProductOrder> productOrders = new ArrayList<>();
+                                                        for (int x = 0; x < totalProduct; x++) {
+                                                            String productId = snapshot.getString("product_ID_" + String.valueOf(x));
+                                                            EbayAPI ebayAPI = new EbayAPI();
+                                                            ProductDatabase product = new ProductDatabase();
+                                                            product = ebayAPI.getItem(productId);
+                                                            String productPrice = String.valueOf(snapshot.get("product_price_" + String.valueOf(x)));
+                                                            long quantity = (long) snapshot.get("product_quantity_" + String.valueOf(x));
+                                                            double weight = snapshot.getDouble("product_weight_" + String.valueOf(x));
+                                                            double transportfee = snapshot.getDouble("transportfee_" + String.valueOf(x));
+
+                                                            productOrders.add(new ProductOrder(product.getImagesUrl().get(0), product.getTitle(), (int) quantity, productPrice, weight, transportfee));
+                                                        }
+
+                                                        Date orderedDate = snapshot.getDate("ordered_date");
+                                                        Date payedDate = snapshot.getDate("payed_date");
+                                                        Date packedDate = snapshot.getDate("packed_date");
+                                                        Date shipedUsaDate = snapshot.getDate("shiped_usa_date");
+                                                        Date shipedVnDate = snapshot.getDate("shiped_vn_date");
+                                                        Date deliveriedDate = snapshot.getDate("delivery_date");
+                                                        Date cancelledDate = snapshot.getDate("cancelled_date");
+
+                                                        String fullname = snapshot.getString("fullname");
+                                                        String phoneNum = snapshot.getString("phone_number");
+                                                        String address = snapshot.getString("address");
+
+                                                        String userId = snapshot.getString("user_ID");
+
+                                                        MyOrderItemModel myOrderItemModel = new MyOrderItemModel(orderStatus, (int) totalItem, totalAmount, deposit, orderId, (int) totalProduct, productOrders,
+                                                                orderedDate, payedDate, packedDate, shipedUsaDate, shipedVnDate, deliveriedDate, cancelledDate, userId);
+                                                        myOrderItemModel.setDelivery(fullname, phoneNum, address);
+                                                        delivery.add(myOrderItemModel);
+                                                    }
+
+                                                    if (myOrderAdapter != null) {
+                                                        myOrderAdapter.notifyDataSetChanged();
+                                                    }
+                                                } else {
+                                                    String error = task.getException().getMessage();
+                                                    Toast.makeText(context,error,Toast.LENGTH_LONG).show();
+                                                }
+                                                loadingDialog.dismiss();
+                                            }
+                                        });
+                            }
+                            loadingDialog.dismiss();
+                        } else {
+                            loadingDialog.dismiss();
+                            String error = task.getException().getMessage();
+                            Toast.makeText(context,error,Toast.LENGTH_LONG).show();
+                        }
+                        //loadingDialog.dismiss();
+                    }
+                });
+    }
+    public static void loadCancelOrders (final Context context, final Dialog loadingDialog,@Nullable final MyOrderAdapter myOrderAdapter) {
+        cancel.clear();
+
+        firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_ORDER").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (final QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                firebaseFirestore.collection("ORDERS").document(documentSnapshot.getString("order_id")).get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @RequiresApi(api = Build.VERSION_CODES.O)
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    DocumentSnapshot snapshot = task.getResult();
+
+                                                    String orderStatus = snapshot.getString("order_status");
+                                                    if (orderStatus.equals("Đã hủy")) {
+                                                        long totalItem = (long) snapshot.get("total_item");
+                                                        String totalAmount = String.valueOf(snapshot.get("total_amount"));
+                                                        String deposit = String.valueOf(snapshot.get("deposit"));
+                                                        String orderId = snapshot.getString("order_ID");
+
+                                                        long totalProduct = snapshot.getLong("list_size");
+
+                                                        ArrayList<ProductOrder> productOrders = new ArrayList<>();
+                                                        for (int x = 0; x < totalProduct; x++) {
+                                                            String productId = snapshot.getString("product_ID_" + String.valueOf(x));
+                                                            EbayAPI ebayAPI = new EbayAPI();
+                                                            ProductDatabase product = new ProductDatabase();
+                                                            product = ebayAPI.getItem(productId);
+                                                            String productPrice = String.valueOf(snapshot.get("product_price_" + String.valueOf(x)));
+                                                            long quantity = (long) snapshot.get("product_quantity_" + String.valueOf(x));
+                                                            double weight = snapshot.getDouble("product_weight_" + String.valueOf(x));
+                                                            double transportfee = snapshot.getDouble("transportfee_" + String.valueOf(x));
+
+                                                            productOrders.add(new ProductOrder(product.getImagesUrl().get(0), product.getTitle(), (int) quantity, productPrice, weight, transportfee));
+                                                        }
+
+                                                        Date orderedDate = snapshot.getDate("ordered_date");
+                                                        Date payedDate = snapshot.getDate("payed_date");
+                                                        Date packedDate = snapshot.getDate("packed_date");
+                                                        Date shipedUsaDate = snapshot.getDate("shiped_usa_date");
+                                                        Date shipedVnDate = snapshot.getDate("shiped_vn_date");
+                                                        Date deliveriedDate = snapshot.getDate("delivery_date");
+                                                        Date cancelledDate = snapshot.getDate("cancelled_date");
+
+                                                        String fullname = snapshot.getString("fullname");
+                                                        String phoneNum = snapshot.getString("phone_number");
+                                                        String address = snapshot.getString("address");
+
+                                                        String userId = snapshot.getString("user_ID");
+
+                                                        MyOrderItemModel myOrderItemModel = new MyOrderItemModel(orderStatus, (int) totalItem, totalAmount, deposit, orderId, (int) totalProduct, productOrders,
+                                                                orderedDate, payedDate, packedDate, shipedUsaDate, shipedVnDate, deliveriedDate, cancelledDate, userId);
+                                                        myOrderItemModel.setDelivery(fullname, phoneNum, address);
+                                                        cancel.add(myOrderItemModel);
+                                                    }
 
                                                     if (myOrderAdapter != null) {
                                                         myOrderAdapter.notifyDataSetChanged();

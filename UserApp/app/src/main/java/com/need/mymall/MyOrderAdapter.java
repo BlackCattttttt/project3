@@ -82,7 +82,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
             orderId = itemView.findViewById(R.id.my_oreritem_id);
         }
 
-        private void setData (String imgUrl, String title, int quantity, String price, String orderstatus, int ordertotalItem, String ordertotalPrice, String Id, final int pos) {
+        private void setData (String imgUrl, String title, int quantity, String price, final String orderstatus, int ordertotalItem, String ordertotalPrice, String Id, final int pos) {
             Glide.with(itemView.getContext()).load(imgUrl).apply(new RequestOptions().placeholder(R.mipmap.home_icon)).into(productImage);
 
             productTitle.setText(title);
@@ -121,6 +121,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
                 public void onClick(View v) {
                     Intent orderDetailIntent = new Intent(itemView.getContext(),OrderDetailActivity.class);
                     orderDetailIntent.putExtra("position",pos);
+                    orderDetailIntent.putExtra("status",orderstatus);
                     itemView.getContext().startActivity(orderDetailIntent);
                 }
             });

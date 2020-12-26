@@ -21,14 +21,20 @@ public class FixerAPI {
 
     public String getExchange() {
         String url = "http://data.fixer.io/api/latest?access_key="+key+"&symbols=USD,VND";
+        loadEx asyLoadEx = new loadEx();
+        asyLoadEx.execute(url);
         try {
-            String exchange = new loadEx().execute(url).get();
-            JSONObject jsonObject = new JSONObject(exchange);
-            JSONObject rates = jsonObject.getJSONObject("rates");
-            String usa = rates.getString("USA");
-            String vnd = rates.getString("VND");
-            double result = Double.parseDouble(vnd) / Double.parseDouble(usa);
-            return String.valueOf(result);
+            String exchange = asyLoadEx.get();
+            if (exchange==null) {
+                return "23173.00";
+            } else {
+                JSONObject jsonObject = new JSONObject(exchange);
+                JSONObject rates = jsonObject.getJSONObject("rates");
+                String usa = rates.getString("USA");
+                String vnd = rates.getString("VND");
+                double result = Double.parseDouble(vnd) / Double.parseDouble(usa);
+                return String.valueOf(result);
+            }
         } catch (ExecutionException e) {
             e.printStackTrace();
             return "23173.00";

@@ -24,21 +24,23 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class OrderDetailActivity extends AppCompatActivity {
 
     private int position;
+    private MyOrderItemModel model;
 
     private TextView fullname,phone,address;
     private ImageView orderedIndicator,payedIndicator,packedIndicator,shipedUsaIndicator,shipedVnIndicator,deliveriedIndicator;
     private ProgressBar O_Pay_progress,Pay_Pack_progress,Pack_SU_progress,SU_SV_progress,SV_D_progress;
     private TextView orderTitle,payTitle,packTitle,shipUsaTitle,shipVnTitle,deliveryTitle;
     private TextView orderDate,payDate,packDate,shipUsaDate,shipVnDate,deliveryDate;
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerView,recyclerView1;
     private TextView orderId,orderedDate;
-    private TextView totalAmount,deposit,amount;
+    private TextView totalAmount,deposit,amount,totalTransportFee;
     private TextView orderStatus;
     private Button cancleOrderBtn;
 
@@ -70,10 +72,16 @@ public class OrderDetailActivity extends AppCompatActivity {
         fullname = findViewById(R.id.my_orderdetail_fullname);
         phone = findViewById(R.id.my_orderdetail_phonenumber);
         address = findViewById(R.id.my_orderdetail_address);
+
         recyclerView = findViewById(R.id.detail_order_item_recycleview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
+
+        recyclerView1 = findViewById(R.id.detail_order_item__weight_recycleview);
+        LinearLayoutManager layoutManager1 = new LinearLayoutManager(this);
+        layoutManager1.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView1.setLayoutManager(layoutManager1);
 
         orderedIndicator = findViewById(R.id.ordered_indicator);
         payedIndicator = findViewById(R.id.payed_indicator);
@@ -108,16 +116,43 @@ public class OrderDetailActivity extends AppCompatActivity {
         totalAmount = findViewById(R.id.my_orderdetail_totalamount);
         deposit = findViewById(R.id.my_orderdetail_deposit);
         amount = findViewById(R.id.my_orderdetail_amount);
+        totalTransportFee = findViewById(R.id.my_oreritem_weight_totaltransportfee);
 
         orderStatus = findViewById(R.id.my_orderdetail_status);
         cancleOrderBtn = findViewById(R.id.cancel_order_btn);
 
         position = getIntent().getIntExtra("position",-1);
-        final MyOrderItemModel model = DBQueries.myOrderItemModelArrayList.get(position);
+        String st = getIntent().getStringExtra("status");
+        if (st.equals("Đã tạo")) {
+            model = DBQueries.orderd.get(position);
+        } else if (st.equals("Đã thanh toán")) {
+            model = DBQueries.payed.get(position);
+        } else if (st.equals("[USA]Đã lấy hàng/Đã nhập kho")) {
+            model = DBQueries.packed.get(position);
+        } else if (st.equals("[VN]Đã lấy hàng/Đã nhập kho")) {
+            model = DBQueries.ship_usa.get(position);
+        } else if (st.equals("[VN]Đã điều phối giao hàng/Đang giao hàng")) {
+            model = DBQueries.ship_vn.get(position);
+        } else if (st.equals("Đã giao hàng")) {
+            model = DBQueries.delivery.get(position);
+        } else if (st.equals("Đã hủy")) {
+            model = DBQueries.cancel.get(position);
+        }
+        ArrayList<ProductOrder> productOrders = model.getProductOrderArrayList();
 
-        ProductOrderAdater productOrderAdater = new ProductOrderAdater(model.getProductOrderArrayList());
+        ProductOrderAdater productOrderAdater = new ProductOrderAdater(productOrders);
         recyclerView.setAdapter(productOrderAdater);
         productOrderAdater.notifyDataSetChanged();
+
+        ProductOrderWeightAdapter productOrderWeightAdapter = new ProductOrderWeightAdapter(productOrders);
+        recyclerView1.setAdapter(productOrderWeightAdapter);
+        productOrderWeightAdapter.notifyDataSetChanged();
+
+        double totalTransportfee=0;
+        for (ProductOrder o : productOrders) {
+            totalTransportfee += o.getProductWeight()*o.getProductTransportfee()*o.getProductQuantity();
+        }
+        totalTransportFee.setText(String.format("%,.2f",totalTransportfee * Double.parseDouble(MainActivity.exchange)) + "đ");
 
         fullname.setText(model.getFullName());
         phone.setText(model.getPhoneNum());

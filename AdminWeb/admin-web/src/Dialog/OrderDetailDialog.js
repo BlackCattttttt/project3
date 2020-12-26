@@ -483,8 +483,13 @@ class OrderDetailDialog extends Component {
     if (editOrder.order_status === "Đã thanh toán") {
       let notification = {
         list_size: 1,
-        title_0: "Đơn hàng của bạn đã được cập nhật",
-        body_0: "Đơn hàng của bạn đã được thanh toán $" + editOrder.deposit,
+        title_0:
+          "Đơn hàng " + editOrder.order_ID + "  của bạn đã được cập nhật",
+        body_0:
+          "Đơn hàng " +
+          editOrder.order_ID +
+          "  của bạn đã được thanh toán $ " +
+          editOrder.deposit,
         date_0: editOrder.payed_date,
         readed_0: true,
       };
@@ -509,8 +514,11 @@ class OrderDetailDialog extends Component {
     ) {
       let notification = {
         list_size: 1,
-        title_0: "Đơn hàng của bạn đã được cập nhật",
-        body_0: "Đơn hàng của bạn đã được đo lại khối lượng",
+        title_0: "Đơn hàng " + editOrder.order_ID + " của bạn đã được cập nhật",
+        body_0:
+          "Đơn hàng " +
+          editOrder.order_ID +
+          "  của bạn đã được đo lại khối lượng",
         date_0: editOrder.shiped_vn_date,
         readed_0: true,
       };
@@ -712,7 +720,7 @@ class OrderDetailDialog extends Component {
                   <TableCell>Hình ảnh</TableCell>
                   <TableCell>Mô tả</TableCell>
                   <TableCell width="140" align="right">
-                    Khối lượng(kg)
+                    Khối lượng (1 sản phẩm)
                   </TableCell>
                   <TableCell width="100" align="right">
                     Số lượng
@@ -816,7 +824,7 @@ class OrderDetailDialog extends Component {
               </TableBody>
             </Table>
 
-            {this.state.orderStatusValue < 5 ? (
+            {this.state.orderStatusValue < 6 ? (
               <Grid container spacing={3} style={{ marginTop: "15px" }}>
                 <Grid item xs={1}></Grid>
                 <Grid item xs={4}>
