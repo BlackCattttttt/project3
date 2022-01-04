@@ -1,0 +1,180 @@
+@prefix book: <https://purl.org/purl/linked-data/book2543#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <https://purl.org/purl/linked-data/book2543> .
+
+<https://purl.org/purl/linked-data/book2543> rdf:type owl:Ontology ;
+                                                               rdfs:comment ""@en .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#authorOf
+:authorOf rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf owl:topObjectProperty ;
+          owl:inverseOf :writtenBy ;
+          rdfs:domain :Author ;
+          rdfs:range :Book .
+
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#publishedBy
+:publishedBy rdf:type owl:ObjectProperty ;
+             rdfs:subPropertyOf owl:topObjectProperty ;
+             owl:inverseOf :publisherOf ;
+             rdfs:domain :Book ;
+             rdfs:range :Publisher .
+
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#publisherOf
+:publisherOf rdf:type owl:ObjectProperty ;
+             rdfs:subPropertyOf owl:topObjectProperty ;
+             rdfs:domain :Publisher ;
+             rdfs:range :Book .
+
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#writtenBy
+:writtenBy rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf owl:topObjectProperty ;
+           rdfs:domain :Book ;
+           rdfs:range :Author .
+
+
+###  http://www.w3.org/2002/07/owl#topObjectProperty
+owl:topObjectProperty rdfs:domain :Author ;
+                      rdfs:range :Book .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#ISBN
+:ISBN rdf:type owl:DatatypeProperty ;
+      rdfs:subPropertyOf owl:topDataProperty ;
+      rdfs:domain :Book ;
+      rdfs:range xsd:long .
+
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#bookID
+:bookID rdf:type owl:DatatypeProperty ;
+        rdfs:subPropertyOf owl:topDataProperty ;
+        rdfs:domain :Book ,
+                    :Rating ;
+        rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#description
+:description rdf:type owl:DatatypeProperty ;
+             rdfs:subPropertyOf owl:topDataProperty ;
+             rdfs:domain :Book ;
+             rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#hasGenre
+:hasGenre rdf:type owl:DatatypeProperty ;
+          rdfs:subPropertyOf owl:topDataProperty ;
+          rdfs:domain :Book ;
+          rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#hasName
+:hasName rdf:type owl:DatatypeProperty ;
+         rdfs:subPropertyOf owl:topDataProperty ;
+         rdfs:domain :Author ,
+                     :Publisher ;
+         rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#language
+:language rdf:type owl:DatatypeProperty ;
+          rdfs:subPropertyOf owl:topDataProperty ;
+          rdfs:domain :Book ;
+          rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#pageCount
+:pageCount rdf:type owl:DatatypeProperty ;
+           rdfs:subPropertyOf owl:topDataProperty .
+
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#publishedDate
+:publishedDate rdf:type owl:DatatypeProperty ;
+               rdfs:subPropertyOf owl:topDataProperty ;
+               rdfs:domain :Book ;
+               rdfs:range xsd:dateTime .
+
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#ranking
+:ranking rdf:type owl:DatatypeProperty ;
+         rdfs:domain :Author ;
+         rdfs:range xsd:int .
+
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#rate
+:rate rdf:type owl:DatatypeProperty ;
+      rdfs:subPropertyOf owl:topDataProperty ;
+      rdfs:domain :Rating ;
+      rdfs:range xsd:int .
+
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#title
+:title rdf:type owl:DatatypeProperty ;
+       rdfs:subPropertyOf owl:topDataProperty ;
+       rdfs:domain :Book ;
+       rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#tlt
+:tlt rdf:type owl:DatatypeProperty ;
+     rdfs:domain :Author ;
+     rdfs:range xsd:int .
+
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#userID
+:userID rdf:type owl:DatatypeProperty ;
+        rdfs:subPropertyOf owl:topDataProperty ;
+        rdfs:domain :Rating ,
+                    :User ;
+        rdfs:range xsd:string .
+
+
+###  http://www.w3.org/2002/07/owl#topDataProperty
+owl:topDataProperty rdfs:domain :Book ;
+                    rdfs:range xsd:int .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#Author
+:Author rdf:type owl:Class ;
+        rdfs:subClassOf :Person .
+
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#Book
+:Book rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#Person
+:Person rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#Publisher
+:Publisher rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#Rating
+:Rating rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/blackcat/ontologies/2021/11/bool#User
+:User rdf:type owl:Class ;
+      rdfs:subClassOf :Person .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
